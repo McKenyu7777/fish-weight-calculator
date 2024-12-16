@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Optional for better contrast */
+        }
+    </style>
+</head>
+<body>
+    <div class="results">
+        <h1>Detection Summary</h1>        
+        <div class="averages">
+            <h3>Average Metrics:</h3>
+            <p><strong>Average Length:</strong> {{ average_data['average_length'] or 0 }} in</p>
+            <p><strong>Average Width:</strong> {{ average_data['average_width'] or 0 }} in</p>
+            <p><strong>Average Weight:</strong> {{ average_data['average_weight'] or 0 }} grams</p>
+        </div>
+        
+        
+        
+             
+        <div class="button-container">
+            <a href="/data">View Data</a>
+            <a href="/">Go Back</a>
+        </div>
+    </div>
+</body>
+</html>

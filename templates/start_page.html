@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection In Progress</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Control Panel Wrapper -->
+    <div class="control-panel-wrapper">
+        <div class="control-panel">
+            <h1 class="control-panel-title">Detection In Progress</h1>
+            <form action="/stop" method="get">
+                <button type="submit" class="primary-button">Stop</button>
+            </form>
+            <div id="timer" class="timer-display"></div>
+        </div>
+    </div>
+
+    <!-- Video Feed Display -->
+    <div class="video-feed-wrapper">
+        <div class="video-feed">
+            <img id="video-feed" 
+                src="{{ url_for('video_feed', video_name=video_name) if video_name else url_for('live_video_feed') }}" 
+                alt="Video feed will appear shortly..." 
+                class="video-display">
+        </div>
+    </div>
+    <script>
+        // Timer initialization as a digital clock
+        let timeLeft = {{ remaining_time }};
+        const timerDisplay = document.getElementById('timer');
+    
+        if (timeLeft > 0) {
+            const countdown = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    window.location.href = '/end'; // Redirect when time runs out
+                } else {
+                    const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+                    const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+                    const seconds = String(timeLeft % 60).padStart(2, '0');
+                    timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+                    timeLeft -= 1;
+                }
+            }, 1000);
+        } else {
+            timerDisplay.textContent = "Unlimited Time";
+        }
+    </script>
+    
+</body>
+</html>

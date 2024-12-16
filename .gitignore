@@ -1,0 +1,13 @@
+....TEST/
+__pycache__/
+backup/
+dataset/
+detected_fish_data/    
+thesis_env/
+videos_for_detection/
+yolov5/
+
+*.log
+*.mp4
+*.zip
+*.exe

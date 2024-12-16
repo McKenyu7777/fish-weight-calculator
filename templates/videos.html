@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos for Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="video-list-wrapper" style="background-color: rgba(0, 55, 110, 0.275); padding: 20px; border-radius: 10px;">
+        <div>
+            <h1 style="text-align: center; margin: 20px auto;">Available Videos for Detection</h1>
+        </div>
+        
+        <div class="upload-wrapper" style="padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <form action="/upload_video" method="post" enctype="multipart/form-data" class="form-controls">
+                <label for="video">Upload a new video:</label>
+                <input type="file" name="video" accept=".mp4" required>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+                    <button type="submit" style="padding: 0.5em 1.5em; font-size: 1rem; border-radius: 4px; background-color: #007BFF; color: white; border: none;">
+                        Upload
+                    </button>
+                    <a href="/" style="padding: 0.5em 1.5em; font-size: 1rem; border-radius: 4px; background-color: #007BFF; color: white; text-decoration: none; text-align: center;">
+                        Back to Control Panel
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        
+        <div class="video-grid">
+            {% for video in videos %}
+            <div class="video-item-wrapper" style="padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <div class="video-item" style="margin-bottom: 1em; text-align: center;">
+                    <video width="320" height="240" controls>
+                        <source src="{{ url_for('static', filename='videos_for_detection/' ~ video) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="margin: 10px 0;">{{ video }}</p>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 5px; align-items: center;">
+                        <button onclick="startVideoDetection('{{ video }}')" style="padding: 0.5em 1em; background-color: #007BFF; color: white; border-radius: 4px; border: none; cursor: pointer; height: 40px; width: 120px;">
+                            Detect Video
+                        </button>
+                        <button class="delete-button" onclick="deleteVideo('{{ video }}')" style="padding: 0.5em 1em; background-color: red; color: white; border-radius: 4px; border: none; cursor: pointer; height: 40px; width: 120px;">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+
+    <script>
+        // Function to handle video deletion
+        function deleteVideo(videoName) {
+            if (confirm(`Are you sure you want to delete the video '${videoName}'?`)) {
+                fetch(`/delete_video/${videoName}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Video '${videoName}' deleted successfully.`);
+                            location.reload(); // Reload the page to reflect changes
+                        } else {
+                            alert(`Error: ${data.error}`);
+                        }
+                    })
+                    .catch(error => {
+                        alert(`Error deleting video: ${error}`);
+                    });
+            }
+        }
+    </script>
+    <script>
+        function startVideoDetection(videoName) {
+            // Redirect to the detection endpoint for the selected video
+            window.location.href = `/start_video_detection/${videoName}`;
+        }
+    </script>
+
+</body>
+</html>

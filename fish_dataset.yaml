@@ -1,0 +1,5 @@
+train: D:/...Thesis/fish-weight-calculator/dataset/images/train
+val: D:/...Thesis/fish-weight-calculator/dataset/images/val
+test: D:/...Thesis/fish-weight-calculator/dataset/images/test
+nc: 1
+names: ['fish']  # Add more class names if necessary

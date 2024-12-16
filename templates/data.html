@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Data Files</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Data Files</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header" style="text-align: center;"> 
+        <h1>Available Data Sessions</h1>
+        
+        <div class="search-container spaced">
+            <input type="text" id="search-bar" placeholder="Search for a session..." style="width: 920px; border-radius: 4px;">
+            <button onclick="filterSessions()" class="search-button">Search</button>
+            <a href="/" class="go-back-button">Go Back</a>
+        </div>
+        
+        
+        <div class="sessions-grid" id="sessions-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em;">
+            {% for session in sessions %}
+                <div class="session-item-wrapper">
+                    <form action="{{ url_for('download_session', session=session) }}" method="get">
+                        <button type="submit">{{ session }}</button>
+                    </form>
+                    <button class="delete-button" style="background-color: red; color: white;" onclick="deleteSession('{{ session }}')">X</button>
+                </div>
+            {% endfor %}
+        </div>
+        
+               
+    </div>
+
+    <script>
+        function deleteSession(session) {
+            if (confirm(`Are you sure you want to delete the session '${session}'?`)) {
+                fetch(`/delete_session/${session}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Session '${session}' deleted successfully.`);
+                            location.reload(); // Reload to reflect changes
+                        } else {
+                            alert(`Error deleting session: ${data.error}`);
+                        }
+                    })
+                    .catch(error => {
+                        alert(`Error deleting session: ${error}`);
+                    });
+            }
+        }
+    </script>
+
+    <script>
+function filterSessions() {
+    const searchTerm = document.getElementById('search-bar').value.toLowerCase().trim();
+    const sessions = document.querySelectorAll('.session-item-wrapper');
+
+    sessions.forEach(session => {
+        const sessionName = session.querySelector('form button').textContent.toLowerCase().trim();
+        if (sessionName.includes(searchTerm)) {
+            session.style.display = 'flex'; // Show matching sessions
+        } else {
+            session.style.display = 'none'; // Hide non-matching sessions
+        }
+    });
+}
+
+    </script>
+</body>
+
+</html>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tilapia Size Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="control-panel">
+        <h1 class="control-panel-title">Tilapia Size Detection</h1>
+        <form action="/start" method="post" onsubmit="return convertToSeconds()">
+            <label for="duration" class="duration-label">Set Duration:</label>
+            <div class="digital-input">
+                <input type="number" id="days" min="0" placeholder="Days">
+                <span>:</span>
+                <input type="number" id="hours" min="0" max="23" placeholder="Hours">
+                <span>:</span>
+                <input type="number" id="minutes" min="0" max="59" placeholder="Minutes">
+                <span>:</span>
+                <input type="number" id="seconds" min="0" max="59" placeholder="Seconds">
+            </div>
+            <input type="hidden" name="duration" id="duration">
+            <button type="submit" class="primary-button">Start</button>
+        </form>
+        <div class="button-container">
+            <a href="/data" class="primary-button">View Data</a>
+            <a href="/videos" class="primary-button">Videos for Detection</a>
+        </div>
+    </div>
+
+    <script>
+        function convertToSeconds() {
+            const days = parseInt(document.getElementById('days').value) || 0;
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+            const seconds = parseInt(document.getElementById('seconds').value) || 0;
+
+            const totalSeconds = (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
+            document.getElementById('duration').value = totalSeconds;
+
+            return true;
+        }
+    </script>
+</body>
+</html>
